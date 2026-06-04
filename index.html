@@ -2,18 +2,25 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pixel Platformer</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #1a1a2e;
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #050518;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
       overflow: hidden;
     }
-    canvas { display: block; }
+    canvas {
+      display: block;
+      /* Phaser Scale.FIT handles sizing, but ensure no extra gap */
+      max-width: 100vw;
+      max-height: 100vh;
+    }
   </style>
 </head>
 <body>

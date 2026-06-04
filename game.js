@@ -111,40 +111,39 @@ const SFX = new SoundManager();
 class BootScene extends Phaser.Scene {
   constructor() { super('Boot'); }
   preload() {
-    const W = 800, H = 450;
+    const W = 1280, H = 720;
     // Loading screen background
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x0d0d2b, 0x0d0d2b, 0x1a0a3a, 0x1a0a3a, 1);
     bg.fillRect(0, 0, W, H);
     // Stars
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 160; i++) {
       bg.fillStyle(0xffffff, Math.random() * 0.7 + 0.3);
       bg.fillRect(Math.random() * W, Math.random() * H * 0.8, 1, 1);
     }
     // Title
-    this.add.text(W / 2, H / 2 - 80, 'PIXEL', {
-      fontSize: '56px', fill: '#ffe566', fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#a05000', strokeThickness: 8
+    this.add.text(W / 2, H / 2 - 110, 'PIXEL', {
+      fontSize: '80px', fill: '#ffe566', fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#a05000', strokeThickness: 10
     }).setOrigin(0.5);
-    this.add.text(W / 2, H / 2 - 20, 'PLATFORMER', {
-      fontSize: '32px', fill: '#88eeff', fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#004466', strokeThickness: 5
+    this.add.text(W / 2, H / 2 - 30, 'PLATFORMER', {
+      fontSize: '46px', fill: '#88eeff', fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#004466', strokeThickness: 6
     }).setOrigin(0.5);
     // Progress bar container
     const barBg = this.add.graphics();
-    barBg.fillStyle(0x111133).fillRoundedRect(W/2 - 180, H/2 + 50, 360, 24, 12);
-    barBg.lineStyle(2, 0x4444aa).strokeRoundedRect(W/2 - 180, H/2 + 50, 360, 24, 12);
+    barBg.fillStyle(0x111133).fillRoundedRect(W/2 - 260, H/2 + 60, 520, 28, 14);
+    barBg.lineStyle(2, 0x4444aa).strokeRoundedRect(W/2 - 260, H/2 + 60, 520, 28, 14);
     const bar = this.add.graphics();
     this.load.on('progress', v => {
       bar.clear();
       bar.fillStyle(0x22ddaa);
-      bar.fillRoundedRect(W/2 - 178, H/2 + 52, 356 * v, 20, 10);
-      // Glow effect on bar
+      bar.fillRoundedRect(W/2 - 258, H/2 + 62, 516 * v, 24, 12);
       bar.fillStyle(0xaaffee, 0.3);
-      bar.fillRoundedRect(W/2 - 178, H/2 + 52, 356 * v, 8, 6);
+      bar.fillRoundedRect(W/2 - 258, H/2 + 62, 516 * v, 10, 8);
     });
-    this.add.text(W / 2, H / 2 + 90, 'Memuat aset...', {
-      fontSize: '14px', fill: '#88aacc', fontFamily: 'Courier New'
+    this.add.text(W / 2, H / 2 + 108, 'Memuat aset...', {
+      fontSize: '18px', fill: '#88aacc', fontFamily: 'Courier New'
     }).setOrigin(0.5);
     // Load assets
     this.load.spritesheet('idle',  'Assets/image/Player/Player_Idle.png',  { frameWidth: 32, frameHeight: 40 });
@@ -182,88 +181,85 @@ class MenuScene extends Phaser.Scene {
       this._stars.push({ gfx: s, x, y, baseAlpha: alpha, phase: Math.random() * Math.PI * 2 });
     }
 
-    // Nebula glow blobs
+    // Nebula glow blobs — scaled for 1280x720
     const nebula = this.add.graphics();
-    nebula.fillStyle(0x220044, 0.18); nebula.fillEllipse(150, 120, 280, 160);
-    nebula.fillStyle(0x002244, 0.15); nebula.fillEllipse(650, 80, 220, 130);
-    nebula.fillStyle(0x001133, 0.12); nebula.fillEllipse(400, 200, 350, 120);
+    nebula.fillStyle(0x220044, 0.18); nebula.fillEllipse(240, 180, 420, 240);
+    nebula.fillStyle(0x002244, 0.15); nebula.fillEllipse(1040, 130, 340, 200);
+    nebula.fillStyle(0x001133, 0.12); nebula.fillEllipse(640, 300, 520, 180);
 
     // Ground strip
     const ground = this.add.graphics();
     ground.fillGradientStyle(0x1a4a1a, 0x1a4a1a, 0x0d2a0d, 0x0d2a0d, 1);
-    ground.fillRect(0, H - 70, W, 70);
-    ground.fillStyle(0x3aaa3a); ground.fillRect(0, H - 70, W, 8);
-    ground.fillStyle(0x2a8a2a, 0.5); ground.fillRect(0, H - 62, W, 4);
-    // Grass tufts
+    ground.fillRect(0, H - 100, W, 100);
+    ground.fillStyle(0x3aaa3a); ground.fillRect(0, H - 100, W, 10);
+    ground.fillStyle(0x2a8a2a, 0.5); ground.fillRect(0, H - 90, W, 5);
     ground.fillStyle(0x4acc4a);
-    for (let i = 0; i < W; i += 12) {
-      ground.fillRect(i + 2, H - 73, 3, 5);
-      ground.fillRect(i + 6, H - 75, 2, 7);
+    for (let i = 0; i < W; i += 16) {
+      ground.fillRect(i + 2,  H - 104, 4, 7);
+      ground.fillRect(i + 8,  H - 107, 3, 9);
+      ground.fillRect(i + 13, H - 103, 3, 5);
     }
 
-    // Decorative trees on ground
+    // Decorative trees spread across 1280px
     const deco = this.add.graphics();
-    [[60, H-70],[180,H-70],[320,H-70],[500,H-70],[640,H-70],[760,H-70]].forEach(([x,y]) => {
-      deco.fillStyle(0x6b3a1a); deco.fillRect(x+10, y-30, 6, 30);
-      deco.fillStyle(0x1e7a14); deco.fillCircle(x+13, y-38, 16);
-      deco.fillStyle(0x28a01e); deco.fillCircle(x+10, y-42, 11);
-      deco.fillStyle(0x50cc40); deco.fillCircle(x+8, y-46, 6);
+    [80,220,400,580,760,940,1120,1230].forEach(x => {
+      const y = H - 100;
+      deco.fillStyle(0x6b3a1a); deco.fillRect(x + 14, y - 48, 9, 48);
+      deco.fillStyle(0x1e7a14); deco.fillCircle(x + 18, y - 58, 24);
+      deco.fillStyle(0x28a01e); deco.fillCircle(x + 14, y - 65, 17);
+      deco.fillStyle(0x50cc40); deco.fillCircle(x + 11, y - 72, 10);
+      deco.fillStyle(0x88ee66, 0.35); deco.fillCircle(x + 9, y - 70, 7);
     });
 
-    // Title with glow effect
-    // Shadow layer
-    this.add.text(W/2 + 3, H/2 - 133, 'PIXEL', {
-      fontSize: '60px', fill: '#220000', fontFamily: 'Courier New', fontStyle: 'bold'
-    }).setOrigin(0.5).setAlpha(0.6);
-    const titlePixel = this.add.text(W/2, H/2 - 136, 'PIXEL', {
-      fontSize: '60px', fill: '#ffe566', fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#aa5500', strokeThickness: 8
-    }).setOrigin(0.5);
-
-    this.add.text(W/2 + 2, H/2 - 77, 'PLATFORMER', {
-      fontSize: '38px', fill: '#002244', fontFamily: 'Courier New', fontStyle: 'bold'
+    // Title — bigger for 1280x720
+    this.add.text(W/2 + 4, H/2 - 166, 'PIXEL', {
+      fontSize: '90px', fill: '#220000', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5).setAlpha(0.5);
-    const titlePlat = this.add.text(W/2, H/2 - 79, 'PLATFORMER', {
-      fontSize: '38px', fill: '#88eeff', fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#004466', strokeThickness: 5
+    const titlePixel = this.add.text(W/2, H/2 - 170, 'PIXEL', {
+      fontSize: '90px', fill: '#ffe566', fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#aa5500', strokeThickness: 10
     }).setOrigin(0.5);
 
-    // Subtitle decorative line
+    this.add.text(W/2 + 3, H/2 - 88, 'PLATFORMER', {
+      fontSize: '54px', fill: '#002244', fontFamily: 'Courier New', fontStyle: 'bold'
+    }).setOrigin(0.5).setAlpha(0.5);
+    const titlePlat = this.add.text(W/2, H/2 - 91, 'PLATFORMER', {
+      fontSize: '54px', fill: '#88eeff', fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#004466', strokeThickness: 6
+    }).setOrigin(0.5);
+
+    // Decorative line
     const line = this.add.graphics();
-    line.lineStyle(2, 0x446688, 0.7);
-    line.strokeRect(W/2 - 200, H/2 - 50, 400, 1);
+    line.lineStyle(2, 0x446688, 0.6);
+    line.strokeRect(W/2 - 280, H/2 - 22, 560, 1);
 
-    // Info text
-    this.add.text(W/2, H/2 - 20, '🪙 Kumpulkan koin  ·  👾 Hindari musuh  ·  🏁 Capai bendera', {
-      fontSize: '13px', fill: '#99ccdd', fontFamily: 'Courier New'
+    // Info text — bigger font
+    this.add.text(W/2, H/2 + 8, '🪙 Kumpulkan koin   ·   👾 Hindari musuh   ·   🏁 Capai bendera', {
+      fontSize: '18px', fill: '#99ccdd', fontFamily: 'Courier New'
     }).setOrigin(0.5);
-    this.add.text(W/2, H/2 + 12, '← → Gerak   ↑ / Space Lompat   Shift Lari', {
-      fontSize: '12px', fill: '#556688', fontFamily: 'Courier New'
+    this.add.text(W/2, H/2 + 44, '← → Gerak     ↑ / Space Lompat     Shift Lari', {
+      fontSize: '16px', fill: '#556688', fontFamily: 'Courier New'
     }).setOrigin(0.5);
-    // Start button with glow border
+
+    // Start button — bigger
     const btnBg = this.add.graphics();
-    btnBg.fillStyle(0x0d6640); btnBg.fillRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-    btnBg.lineStyle(2, 0x22ffaa, 0.8); btnBg.strokeRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-    btnBg.fillStyle(0x1da56a, 0.4); btnBg.fillRoundedRect(W/2 - 108, H/2 + 57, 216, 20, 8);
+    const drawBtn = (hover) => {
+      btnBg.clear();
+      btnBg.fillStyle(hover ? 0x1a8a55 : 0x0d6640);
+      btnBg.fillRoundedRect(W/2 - 150, H/2 + 88, 300, 64, 14);
+      btnBg.lineStyle(hover ? 3 : 2, hover ? 0x44ffcc : 0x22ffaa, hover ? 1.0 : 0.8);
+      btnBg.strokeRoundedRect(W/2 - 150, H/2 + 88, 300, 64, 14);
+      btnBg.fillStyle(hover ? 0x22cc88 : 0x1da56a, 0.4);
+      btnBg.fillRoundedRect(W/2 - 148, H/2 + 90, 296, 26, 10);
+    };
+    drawBtn(false);
 
-    const btn = this.add.text(W/2, H/2 + 80, '▶  MULAI GAME', {
-      fontSize: '22px', fill: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+    const btn = this.add.text(W/2, H/2 + 120, '▶   MULAI GAME', {
+      fontSize: '28px', fill: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-    btn.on('pointerover', () => {
-      btn.setStyle({ fill: '#ffe566' });
-      btnBg.clear();
-      btnBg.fillStyle(0x1a8a55); btnBg.fillRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-      btnBg.lineStyle(3, 0x44ffcc, 1.0); btnBg.strokeRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-      btnBg.fillStyle(0x22cc88, 0.5); btnBg.fillRoundedRect(W/2 - 108, H/2 + 57, 216, 20, 8);
-    });
-    btn.on('pointerout', () => {
-      btn.setStyle({ fill: '#ffffff' });
-      btnBg.clear();
-      btnBg.fillStyle(0x0d6640); btnBg.fillRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-      btnBg.lineStyle(2, 0x22ffaa, 0.8); btnBg.strokeRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-      btnBg.fillStyle(0x1da56a, 0.4); btnBg.fillRoundedRect(W/2 - 108, H/2 + 57, 216, 20, 8);
-    });
+    btn.on('pointerover', () => { btn.setStyle({ fill: '#ffe566' }); drawBtn(true); });
+    btn.on('pointerout',  () => { btn.setStyle({ fill: '#ffffff' }); drawBtn(false); });
 
     const startGame = () => {
       SFX._init(); SFX._resume();
@@ -275,24 +271,15 @@ class MenuScene extends Phaser.Scene {
     btn.on('pointerdown', startGame);
     this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER).on('down', startGame);
 
-    // Pulse animation on button
-    this.tweens.add({
-      targets: [btn, btnBg], scaleX: 1.04, scaleY: 1.04,
-      yoyo: true, repeat: -1, duration: 800, ease: 'Sine.easeInOut'
-    });
+    this.tweens.add({ targets: [btn, btnBg], scaleX: 1.03, scaleY: 1.03, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
+    this.tweens.add({ targets: titlePixel, y: H/2 - 175, yoyo: true, repeat: -1, duration: 1800, ease: 'Sine.easeInOut' });
+    this.tweens.add({ targets: titlePlat,  y: H/2 - 95,  yoyo: true, repeat: -1, duration: 2100, ease: 'Sine.easeInOut' });
 
-    // Title float animation
-    this.tweens.add({ targets: titlePixel, y: H/2 - 140, yoyo: true, repeat: -1, duration: 1800, ease: 'Sine.easeInOut' });
-    this.tweens.add({ targets: titlePlat, y: H/2 - 83, yoyo: true, repeat: -1, duration: 2100, ease: 'Sine.easeInOut' });
-
-    // Version text
-    this.add.text(W - 8, H - 8, 'v2.0', {
-      fontSize: '10px', fill: '#334455', fontFamily: 'Courier New'
+    this.add.text(W - 10, H - 10, 'v2.0', {
+      fontSize: '13px', fill: '#334455', fontFamily: 'Courier New'
     }).setOrigin(1, 1);
 
     this.cameras.main.fadeIn(600);
-
-    // Twinkle stars in update
     this._starTime = 0;
   }
 
@@ -454,51 +441,50 @@ class GameScene extends Phaser.Scene {
 
     // HUD background panel
     const hudBg = this.add.graphics();
-    hudBg.fillStyle(0x000000, 0.65); hudBg.fillRect(0, 0, W, 42);
-    hudBg.lineStyle(1, 0x334466, 0.8); hudBg.strokeRect(0, 41, W, 1);
-    // Subtle gradient shine on HUD
-    hudBg.fillStyle(0xffffff, 0.04); hudBg.fillRect(0, 0, W, 12);
+    hudBg.fillStyle(0x000000, 0.65); hudBg.fillRect(0, 0, W, 48);
+    hudBg.lineStyle(1, 0x334466, 0.8); hudBg.strokeRect(0, 47, W, 1);
+    hudBg.fillStyle(0xffffff, 0.04); hudBg.fillRect(0, 0, W, 14);
 
     // Score section
     const scoreBg = this.add.graphics();
-    scoreBg.fillStyle(0x1a2a44, 0.8); scoreBg.fillRoundedRect(6, 6, 160, 30, 6);
-    scoreBg.lineStyle(1, 0x3355aa, 0.6); scoreBg.strokeRoundedRect(6, 6, 160, 30, 6);
+    scoreBg.fillStyle(0x1a2a44, 0.8); scoreBg.fillRoundedRect(8, 7, 200, 34, 7);
+    scoreBg.lineStyle(1, 0x3355aa, 0.6); scoreBg.strokeRoundedRect(8, 7, 200, 34, 7);
 
-    this.scoreText = this.add.text(16, 13, 'SCORE: ' + this.score, {
-      fontSize: '13px', fill: '#ffd700', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.scoreText = this.add.text(20, 15, 'SCORE: ' + this.score, {
+      fontSize: '16px', fill: '#ffd700', fontFamily: 'Courier New', fontStyle: 'bold'
     });
 
     // Coins section
     const coinBg = this.add.graphics();
-    coinBg.fillStyle(0x2a1a00, 0.8); coinBg.fillRoundedRect(174, 6, 90, 30, 6);
-    coinBg.lineStyle(1, 0xaa7700, 0.6); coinBg.strokeRoundedRect(174, 6, 90, 30, 6);
+    coinBg.fillStyle(0x2a1a00, 0.8); coinBg.fillRoundedRect(218, 7, 120, 34, 7);
+    coinBg.lineStyle(1, 0xaa7700, 0.6); coinBg.strokeRoundedRect(218, 7, 120, 34, 7);
 
-    this.coinText = this.add.text(184, 13, '🪙 ' + this.coins, {
-      fontSize: '13px', fill: '#f0c020', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.coinText = this.add.text(230, 15, '🪙 ' + this.coins, {
+      fontSize: '16px', fill: '#f0c020', fontFamily: 'Courier New', fontStyle: 'bold'
     });
 
     // Lives section (center)
     const livesBg = this.add.graphics();
-    livesBg.fillStyle(0x2a0a0a, 0.8); livesBg.fillRoundedRect(W/2 - 55, 6, 110, 30, 6);
-    livesBg.lineStyle(1, 0xaa2233, 0.6); livesBg.strokeRoundedRect(W/2 - 55, 6, 110, 30, 6);
+    livesBg.fillStyle(0x2a0a0a, 0.8); livesBg.fillRoundedRect(W/2 - 70, 7, 140, 34, 7);
+    livesBg.lineStyle(1, 0xaa2233, 0.6); livesBg.strokeRoundedRect(W/2 - 70, 7, 140, 34, 7);
 
-    this.livesText = this.add.text(W/2, 13, '', {
-      fontSize: '14px', fill: '#ff4466', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.livesText = this.add.text(W/2, 15, '', {
+      fontSize: '16px', fill: '#ff4466', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5, 0);
     this.updateHeartsHUD();
 
     // Level badge (right)
     const lvlBg = this.add.graphics();
-    lvlBg.fillStyle(0x0a1a2a, 0.8); lvlBg.fillRoundedRect(W - 86, 6, 80, 30, 6);
-    lvlBg.lineStyle(1, 0x2288cc, 0.6); lvlBg.strokeRoundedRect(W - 86, 6, 80, 30, 6);
+    lvlBg.fillStyle(0x0a1a2a, 0.8); lvlBg.fillRoundedRect(W - 110, 7, 102, 34, 7);
+    lvlBg.lineStyle(1, 0x2288cc, 0.6); lvlBg.strokeRoundedRect(W - 110, 7, 102, 34, 7);
 
-    this.levelText = this.add.text(W - 46, 13, 'LVL ' + this.level, {
-      fontSize: '13px', fill: '#88eeff', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.levelText = this.add.text(W - 59, 15, 'LVL ' + this.level, {
+      fontSize: '16px', fill: '#88eeff', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5, 0);
 
     // Controls hint (bottom)
     const ctrlText = this.add.text(W/2, H - 10, '← → Gerak   ↑/Space Lompat   Shift Lari', {
-      fontSize: '10px', fill: 'rgba(150,180,220,0.45)', fontFamily: 'Courier New'
+      fontSize: '12px', fill: 'rgba(150,180,220,0.4)', fontFamily: 'Courier New'
     }).setOrigin(0.5, 1);
 
     this.hud.add([hudBg, scoreBg, this.scoreText, coinBg, this.coinText,
@@ -898,8 +884,8 @@ class GameScene extends Phaser.Scene {
 
   showFloatText(x, y, text, color) {
     const t = this.add.text(x, y, text, {
-      fontSize: '15px', fill: color, fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#000000', strokeThickness: 4
+      fontSize: '20px', fill: color, fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#000000', strokeThickness: 5
     }).setOrigin(0.5).setDepth(200).setScrollFactor(1);
     this.tweens.add({
       targets: t, y: y - 60, alpha: 0, duration: 1000, ease: 'Power2',
@@ -1026,50 +1012,46 @@ class GameOverScene extends Phaser.Scene {
     bg.fillRect(0, 0, W, H);
 
     // Scanlines effect
-    for (let y = 0; y < H; y += 4) {
-      bg.fillStyle(0x000000, 0.08); bg.fillRect(0, y, W, 2);
+    for (let y = 0; y < H; y += 5) {
+      bg.fillStyle(0x000000, 0.07); bg.fillRect(0, y, W, 2);
     }
 
     // Red glow behind title
     const glow = this.add.graphics();
-    glow.fillStyle(0xff0022, 0.08); glow.fillEllipse(W/2, H/2 - 80, 500, 200);
+    glow.fillStyle(0xff0022, 0.08); glow.fillEllipse(W/2, H/2 - 100, 700, 280);
 
     // Title
-    this.add.text(W/2 + 4, H/2 - 116, 'GAME OVER', {
-      fontSize: '52px', fill: '#440011', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.add.text(W/2 + 5, H/2 - 145, 'GAME OVER', {
+      fontSize: '72px', fill: '#440011', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5);
-    const title = this.add.text(W/2, H/2 - 120, 'GAME OVER', {
-      fontSize: '52px', fill: '#ff2244', fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#880022', strokeThickness: 6
+    const title = this.add.text(W/2, H/2 - 150, 'GAME OVER', {
+      fontSize: '72px', fill: '#ff2244', fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#880022', strokeThickness: 8
     }).setOrigin(0.5);
 
-    // Flicker animation on title
-    this.tweens.add({
-      targets: title, alpha: 0.7, yoyo: true, repeat: -1, duration: 150,
-      ease: 'Stepped', easeParams: [2]
-    });
+    this.tweens.add({ targets: title, alpha: 0.7, yoyo: true, repeat: -1, duration: 150, ease: 'Stepped', easeParams: [2] });
 
     // Score panel
     const panel = this.add.graphics();
-    panel.fillStyle(0x110022, 0.9); panel.fillRoundedRect(W/2 - 160, H/2 - 60, 320, 90, 12);
-    panel.lineStyle(2, 0x660033, 0.8); panel.strokeRoundedRect(W/2 - 160, H/2 - 60, 320, 90, 12);
-    panel.fillStyle(0xffffff, 0.03); panel.fillRoundedRect(W/2 - 158, H/2 - 58, 316, 30, 10);
+    panel.fillStyle(0x110022, 0.9); panel.fillRoundedRect(W/2 - 220, H/2 - 80, 440, 110, 14);
+    panel.lineStyle(2, 0x660033, 0.8); panel.strokeRoundedRect(W/2 - 220, H/2 - 80, 440, 110, 14);
+    panel.fillStyle(0xffffff, 0.03); panel.fillRoundedRect(W/2 - 218, H/2 - 78, 436, 36, 12);
 
-    this.add.text(W/2, H/2 - 38, `Skor Akhir: ${this.finalScore}`, {
-      fontSize: '20px', fill: '#ffd700', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.add.text(W/2, H/2 - 46, `Skor Akhir: ${this.finalScore}`, {
+      fontSize: '28px', fill: '#ffd700', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5);
     this.add.text(W/2, H/2 - 8, `Koin: 🪙 ${this.finalCoins}`, {
-      fontSize: '16px', fill: '#f0c020', fontFamily: 'Courier New'
+      fontSize: '22px', fill: '#f0c020', fontFamily: 'Courier New'
     }).setOrigin(0.5);
 
     // Retry button
     const btnBg = this.add.graphics();
-    btnBg.fillStyle(0x880011); btnBg.fillRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-    btnBg.lineStyle(2, 0xff4455, 0.8); btnBg.strokeRoundedRect(W/2 - 110, H/2 + 55, 220, 50, 10);
-    btnBg.fillStyle(0xff2233, 0.3); btnBg.fillRoundedRect(W/2 - 108, H/2 + 57, 216, 20, 8);
+    btnBg.fillStyle(0x880011); btnBg.fillRoundedRect(W/2 - 150, H/2 + 65, 300, 65, 13);
+    btnBg.lineStyle(2, 0xff4455, 0.8); btnBg.strokeRoundedRect(W/2 - 150, H/2 + 65, 300, 65, 13);
+    btnBg.fillStyle(0xff2233, 0.3); btnBg.fillRoundedRect(W/2 - 148, H/2 + 67, 296, 26, 10);
 
-    const retry = this.add.text(W/2, H/2 + 80, '↺  COBA LAGI', {
-      fontSize: '22px', fill: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+    const retry = this.add.text(W/2, H/2 + 98, '↺  COBA LAGI', {
+      fontSize: '28px', fill: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
     retry.on('pointerover', () => { retry.setStyle({ fill: '#ffe566' }); });
@@ -1116,43 +1098,43 @@ class GameClearScene extends Phaser.Scene {
     const trophyGlow = this.add.graphics();
     trophyGlow.fillStyle(0xffcc00, 0.1); trophyGlow.fillCircle(W/2, H/2 - 80, 80);
 
-    this.add.text(W/2, H/2 - 110, '🏆', { fontSize: '72px' }).setOrigin(0.5);
+    this.add.text(W/2, H/2 - 110, '🏆', { fontSize: '96px' }).setOrigin(0.5);
 
     // Title
-    this.add.text(W/2 + 3, H/2 - 43, 'GAME CLEAR!', {
-      fontSize: '44px', fill: '#220000', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.add.text(W/2 + 4, H/2 - 52, 'GAME CLEAR!', {
+      fontSize: '62px', fill: '#220000', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5);
-    const title = this.add.text(W/2, H/2 - 46, 'GAME CLEAR!', {
-      fontSize: '44px', fill: '#ffe566', fontFamily: 'Courier New', fontStyle: 'bold',
-      stroke: '#aa7700', strokeThickness: 6
+    const title = this.add.text(W/2, H/2 - 56, 'GAME CLEAR!', {
+      fontSize: '62px', fill: '#ffe566', fontFamily: 'Courier New', fontStyle: 'bold',
+      stroke: '#aa7700', strokeThickness: 8
     }).setOrigin(0.5);
-    this.tweens.add({ targets: title, y: H/2 - 50, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+    this.tweens.add({ targets: title, y: H/2 - 61, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
 
-    this.add.text(W/2, H/2 + 2, 'Selamat! Semua 5 level selesai!', {
-      fontSize: '14px', fill: '#99ccdd', fontFamily: 'Courier New'
+    this.add.text(W/2, H/2 + 18, 'Selamat! Semua 5 level selesai!', {
+      fontSize: '20px', fill: '#99ccdd', fontFamily: 'Courier New'
     }).setOrigin(0.5);
 
     // Score panel
     const panel = this.add.graphics();
-    panel.fillStyle(0x0a0a22, 0.9); panel.fillRoundedRect(W/2 - 160, H/2 + 20, 320, 80, 12);
-    panel.lineStyle(2, 0x4455aa, 0.8); panel.strokeRoundedRect(W/2 - 160, H/2 + 20, 320, 80, 12);
-    panel.fillStyle(0xffffff, 0.04); panel.fillRoundedRect(W/2 - 158, H/2 + 22, 316, 25, 10);
+    panel.fillStyle(0x0a0a22, 0.9); panel.fillRoundedRect(W/2 - 220, H/2 + 42, 440, 100, 14);
+    panel.lineStyle(2, 0x4455aa, 0.8); panel.strokeRoundedRect(W/2 - 220, H/2 + 42, 440, 100, 14);
+    panel.fillStyle(0xffffff, 0.04); panel.fillRoundedRect(W/2 - 218, H/2 + 44, 436, 30, 12);
 
-    this.add.text(W/2, H/2 + 40, `Skor Akhir: ${this.finalScore}`, {
-      fontSize: '20px', fill: '#ffd700', fontFamily: 'Courier New', fontStyle: 'bold'
+    this.add.text(W/2, H/2 + 62, `Skor Akhir: ${this.finalScore}`, {
+      fontSize: '26px', fill: '#ffd700', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5);
-    this.add.text(W/2, H/2 + 66, `Total Koin: 🪙 ${this.finalCoins}`, {
-      fontSize: '15px', fill: '#f0c020', fontFamily: 'Courier New'
+    this.add.text(W/2, H/2 + 96, `Total Koin: 🪙 ${this.finalCoins}`, {
+      fontSize: '20px', fill: '#f0c020', fontFamily: 'Courier New'
     }).setOrigin(0.5);
 
     // Play again button
     const btnBg = this.add.graphics();
-    btnBg.fillStyle(0x0d6640); btnBg.fillRoundedRect(W/2 - 110, H/2 + 120, 220, 50, 10);
-    btnBg.lineStyle(2, 0x22ffaa, 0.8); btnBg.strokeRoundedRect(W/2 - 110, H/2 + 120, 220, 50, 10);
-    btnBg.fillStyle(0x1da56a, 0.4); btnBg.fillRoundedRect(W/2 - 108, H/2 + 122, 216, 20, 8);
+    btnBg.fillStyle(0x0d6640); btnBg.fillRoundedRect(W/2 - 150, H/2 + 158, 300, 65, 13);
+    btnBg.lineStyle(2, 0x22ffaa, 0.8); btnBg.strokeRoundedRect(W/2 - 150, H/2 + 158, 300, 65, 13);
+    btnBg.fillStyle(0x1da56a, 0.4); btnBg.fillRoundedRect(W/2 - 148, H/2 + 160, 296, 26, 10);
 
-    const retry = this.add.text(W/2, H/2 + 145, '↩  MAIN LAGI', {
-      fontSize: '22px', fill: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
+    const retry = this.add.text(W/2, H/2 + 191, '↩  MAIN LAGI', {
+      fontSize: '28px', fill: '#ffffff', fontFamily: 'Courier New', fontStyle: 'bold'
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
     retry.on('pointerover', () => retry.setStyle({ fill: '#ffe566' }));
@@ -1192,9 +1174,15 @@ class GameClearScene extends Phaser.Scene {
 // ══════════════════════════════════════════════════════════════════
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 450,
+  width: 1280,
+  height: 720,
   backgroundColor: '#050518',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 1280,
+    height: 720,
+  },
   physics: {
     default: 'arcade',
     arcade: { gravity: { y: 600 }, debug: false }
